@@ -75,10 +75,10 @@ addValue _   x            _ = x
 
 addImpliedProperties ∷ Mf2ParserSettings → Element → Value → Value
 addImpliedProperties settings e v@(Object o) = Object $ addIfNull "photo" "photo" resolveURI' $ addIfNull "url" "url" resolveURI' $ addIfNullAndNoOthers "name" "name" id o
-  where addIfNull nameJ nameH f obj = if isNothing $ v ^? key nameJ then KM.insert (toK nameJ) (vsingleton $ f <$> implyProperty nameH e) obj else obj
+  where addIfNull nameJ nameH f obj = if isNothing $ v ^? key nameJ then KM.insert nameJ (vsingleton $ f <$> implyProperty nameH e) obj else obj
         addIfNullAndNoOthers nameJ nameH f obj =
           if isNothing (v ^? key nameJ) && isNothing (v ^? key "children") && isNothing (e ^? plate . cosmos . peElements)
-             then KM.insert (toK nameJ) (vsingleton $ f <$> implyProperty nameH e) obj else obj
+             then KM.insert nameJ (vsingleton $ f <$> implyProperty nameH e) obj else obj
         peElements = attributeSatisfies "class" $ any (\x → isPClass x || isEClass x) . T.split isSpace
         resolveURI' = resolveURI $ baseUri settings
 addImpliedProperties _ _ v = v

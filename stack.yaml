@@ -10,4 +10,8 @@ extra-deps:
     commit: fa19268282a5afff7aa0ba8babc723d835bed4f1 # aeson-2.0
   - aws-lambda-haskell-runtime-wai-2.0.2
   - xml-lens-0.3.1
-resolver: lts-19.28
+resolver: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/21/11.yaml
+system-ghc: true
+nix:
+  enable: false
+allow-newer: true

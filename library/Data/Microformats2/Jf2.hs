@@ -8,7 +8,6 @@ import           Data.Maybe
 import           Data.Aeson.Lens
 #if MIN_VERSION_aeson(2,0,0)
 import qualified Data.Aeson.KeyMap as KM
-import qualified Data.Aeson.Key as K
 #else
 import qualified Data.HashMap.Strict as KM
 #endif
@@ -22,9 +21,6 @@ mf2ToJf2 val@(Object _) = flattenItems $ processItems $ processChildren $ flatte
         flattenType x = x
         flattenProps p@(Object o) = Object $ KM.delete "value" $ KM.delete "properties" $
           foldl (\acc (k, v) → KM.insert k (flattenArr $ processProp k v) acc) o $
-#if MIN_VERSION_aeson(2,0,0)
-          map (\(k, v) -> (K.fromText k, v)) $
-#endif
           p ^@.. key "properties" . members
         flattenProps x = x
         processProp "content" v = v & _Array . each %~ processContent
